@@ -5,7 +5,7 @@ $data = $_GET['data'];
 
 
 
-$handle = file_get_contents("http://localhost:8080/scicrop-be-web/TraitifyConnector?action=".$action."&data=".$data);
+$handle = file_get_contents("http://177.32.17.120:8080/scicrop-be-web/TraitifyConnector?action=".$action."&data=".$data);
 
 
 

@@ -1,9 +1,5 @@
 <!DOCTYPE HTML>
-<!--
-	Solarize by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
--->
+
 <html>
 	<head>
 		<title>SciCrop</title>
@@ -35,10 +31,41 @@
 		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
 		<script>
 
-		function getResults(assessment){
+		function getTypeDesc(type){
 
+			if(type == "Visionary"){
+				type = "You could select small parts of your property and try new types of crops, based on the information that SciCrop sends to you."
+			} else if(type == "Naturalist"){
+				type = "You can use SciCrop to create models of how modify your plantation use reduce the use of artificialy produced fertilizers and avoid the external contamination of your fields, and also keep a good productivity."
+			} else if(type == "Action-Taker"){
+				type = "You can use the data from SciCrop to create a situation room in your farm, in order to be able to take the right decisions about harvesting, fertilizing and crop transportation."
+			} else if(type == "Inventor"){
+				type = "You can modify SciCrop sensors as well as implement your own routes inside the drones, and thus, experiment new results."
+			} else if(type == "Analyzer"){
+				type = "Nobody knows better your crop than you, so you can get the raw data produced by SciCrop to create your own predictions, using or not the algorithms from SciCrop, actually, you will have completely freedom to use the data."
+			} else if(type == "Planner"){
+				type = "You can query all historical series about weather and productivity from SciCrop related with your crop, and then you can aggregate the predictions reports from SciCrop and make planings based on different scenarios."
+			} else if(type == "Mentor"){
+				type = "No matter where you are, you can access the SciCrop data that is important tou your farm, and then you can give specific orientations to your team, to make changes in your field or confirm the SciCrop findings."
+			} else {
+				type = "You can query all historical series about weather and productivity from SciCrop related with your crop, and then you can aggregate the predictions reports from SciCrop and make planings based on different scenarios."
+
+			}
+
+			return type;
+		}
+
+		function jump(h){
+		    var url = location.href;               //Save down the URL without hash.
+		    location.href = "#"+h;                 //Go to the target element.
+		    history.replaceState(null,null,url);   //Don't like hashes. Changing it back.
+		}
+
+
+		function getResults(assessment){
+			jump("top");
 			$("#title").empty();
-			$("#title").append("Test finished! Processing the results...");
+			$("#title").append("Test finished! Processing the results <img src=\"images/ajax-loader.gif\"> ");
 			$("#title").show();
 			$("#line").empty();
 
@@ -49,6 +76,11 @@
 				dataType: "json",
 				success: function(responseObject) {
 
+					var typeA = (responseObject.types[0][0]);
+          var typeB = (responseObject.types[1][0]);
+
+					var typeAD = getTypeDesc(typeA);
+					var typeBD = getTypeDesc(typeB);
 
 					plotTypes(responseObject.types);
 					plotTraits(responseObject.traits);
@@ -59,6 +91,12 @@
 					$("#line").append("Based on your test, discover how Scicrop can be useful for you!");
 					$("#line").show();
 
+					traitify = Traitify.ui.load("results", assessment, ".traitify-widget");// Example selector for widget target
+
+
+					//$("#text_types").append("<br><br><span class=\"name\">Your most important aspects of your personality are: "+typeA+" and "+typeB+"</span><br>")
+					$("#text_types").append("<br><div align=\"center\"><img src=\"images/logo_nome_144.png\"></div><br><span class=\"blend-description\">"+typeAD+"</span> ");
+					$("#text_types").append("<span class=\"blend-description\">"+typeBD+"</span><br><br>");
 				},
 
 
@@ -129,7 +167,7 @@
 
 			$("#test").hide();
 			$("#title").empty();
-			$("#title").append("Loading the Test...");
+			$("#title").append("Loading the Test <img src=\"images/ajax-loader.gif\">");
 			$("#title").show();
 			$("#line").empty();
 
@@ -172,7 +210,7 @@
 
 	</head>
 	<body>
-
+		<a href="#top"></a>
 		<!-- Header Wrapper -->
 			<div class="wrapper style1">
 
@@ -186,10 +224,10 @@
 						<!-- Nav -->
 							<nav id="nav">
 								<ul>
-									<li class="active"><a href="index.html">Home</a></li>
+									<li class="active"><a href="http://scicrop.com">Home</a></li>
 
-									<li><a href="left-sidebar.html">Blog</a></li>
-									<li><a href="right-sidebar.html">angel.co/scicrop</a></li>
+									<li><a href="http://blog.scicrop.com/">Blog</a></li>
+									<li><a href="http://angel.co/scicrop">angel.co/scicrop</a></li>
 								</ul>
 							</nav>
 
@@ -214,11 +252,17 @@
 					</section>
 					<div class="assessment"></div>
 					<div class="slide-deck"></div>
-					<div id="chart_types"></div>
-					<div id="chart_traits"></div>
+
+
+					<div class="traitify-widget"></div>
+				  <div id="text_types" ></div>
+
+					<div id="chart_types" style="width: 860px; height: 250px; position: relative; margin: 0 auto;"></div><br>
+					<div id="chart_traits" style="width: 860px; height: 250px; position: relative; margin: 0 auto;"></div>
 					<div class="personality-types"></div>
 					<div class="personality-traits"></div>
 				</div>
+				<br><br><br><br>
 			</div>
 
 
@@ -229,18 +273,6 @@
 			<header class="major">
 				<h2>Contact us</h2>
 				<span class="byline">We are straightforward and cool people. We believe in freedom of information.</span>
-					<br>
-					<h4>Sao Paulo Office</h4>
-				<p>
-					Paulista Ave., 1636 - 16º Floor, 1602 – Bela Vista<br>
-					Sao Paulo – SP, Zipcode 01311-200 - Paulista Corporate Building
-					<br>
-					+55 (11) 2776-2392$("#title").
-					<br>
-					<br>
-					<!--mapa-->
-					<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3657.201706445454!2d-46.6565241!3d-23.5611981!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59ceb68a52d1%3A0xa0c4262b9190b8ab!2sAv.+Paulista%2C+1636+-+Bela+Vista%2C+S%C3%A3o+Paulo+-+SP!5e0!3m2!1spt-BR!2sbr!4v1410206267490" width="600" height="450" frameborder="0" style="border:0"></iframe>
-				</p>
 			</header>
 			<ul class="icons">
 				<li class="active"><a href="#" class="fa fa-leaf"><a href="mailto:info@scicrop.com">&nbsp;info@scicrop.com</a></a></li>

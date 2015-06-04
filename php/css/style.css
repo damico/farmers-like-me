@@ -9,6 +9,20 @@
 
 /* Basic */
 
+#text_types {
+width: 100%;
+position: relative;
+text-align: justify;
+max-width: 860px;
+margin: 0 auto;
+font-family: "Source Sans Pro";
+color: #555555;
+}
+
+.slide {
+        height: 400px !important;
+    }
+
 	body {
 		background: #222222;
 	}
@@ -106,7 +120,7 @@
 	}
 
 	header.major {
-		padding-bottom: 3em;
+		padding-bottom: 1em;
 		text-align: center;
 		text-transform: uppercase;
 	}
@@ -700,7 +714,7 @@
 /* Main */
 
 	#main {
-		padding: 4em 0;
+		padding: 2em 0;
 	}
 
 		#main #content .major, #main #sidebar .major {
