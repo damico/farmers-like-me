@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Class-Path: jackson-annotations-2.5.3.jar 
+ jackson-core-2.5.3.jar 
+ jackson-databind-2.5.3.jar 
+ jackson-jaxrs-base-2.5.3.jar 
+ jackson-jaxrs-json-provider-2.5.3.jar 
+ jersey-client-1.17.jar 
+ jersey-core-1.17.jar 
+ traitify-java-0.0.14.jar
+

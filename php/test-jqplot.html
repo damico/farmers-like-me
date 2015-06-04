@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <script src="js/jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="js/jquery.jqplot.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/jquery.jqplot.css" />
+    <script type="text/javascript" src="js/jqplot.barRenderer.min.js"></script>
+    <script type="text/javascript" src="js/jqplot.categoryAxisRenderer.min.js"></script>
+    <script type="text/javascript" src="js/jqplot.pointLabels.min.js"></script>
+
+
+    <script type="text/javascript" src="js/jqplot.canvasTextRenderer.min.js"></script>
+    <script type="text/javascript" src="js/jqplot.canvasAxisTickRenderer.min.js"></script>
+
+
+    <script>
+
+
+    </script>
+
+
+  </head>
+  <body onload="getTraitsResult('9e0ac3e4-6881-4c77-be56-6f3d859f5a25')">
+    <script>
+
+    function getTraitsResult(assessment){
+      $.ajax({
+    		type: "GET",
+    		url: "proxy.php?action=results&data="+assessment,
+    		data: "",
+    		dataType: "json",
+    		success: function(responseObject) {
+
+
+
+          alert(responseObject.scores);
+          alert(responseObject.labels);
+          plotTraits(responseObject.scores, responseObject.labels);
+    		},
+    		error: function(){
+    			setFooter(responseObject.date+": "+responseObject.returnMessage);
+    		}});
+
+        //85cb23de-dd66-4263-8cc6-e90cea35c878
+        //9e0ac3e4-6881-4c77-be56-6f3d859f5a25
+    }
+
+
+      function plotTraits(data, label){
+
+        var plot1 = $.jqplot('chart', [data], {
+            title: 'Personality Traits',
+            series:[{renderer:$.jqplot.BarRenderer}],
+            seriesDefaults: {
+          renderer: $.jqplot.BarRenderer,
+          rendererOptions:{barMargin: 25},
+          pointLabels:{show:true, stackedValue: true}
+      },
+            axesDefaults: {
+                tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+                tickOptions: {
+                  angle: -30,
+                  fontSize: '10pt'
+                }
+            },
+            axes: {
+              xaxis: {
+                renderer: $.jqplot.CategoryAxisRenderer
+              }
+            }
+
+        });
+      }
+    </script>
+    <div id="chart"></div>
+  </body>
+</html>

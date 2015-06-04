@@ -1,0 +1,115 @@
+<html>
+  <head>
+    <script src="js/jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="js/jquery.jqplot.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/jquery.jqplot.css" />
+    <script type="text/javascript" src="js/jqplot.barRenderer.min.js"></script>
+    <script type="text/javascript" src="js/jqplot.categoryAxisRenderer.min.js"></script>
+    <script type="text/javascript" src="js/jqplot.pointLabels.min.js"></script>
+
+    <script src="https://cdn.traitify.com/js/widgets/v1.js"></script>
+
+    <script>
+
+    function getTraitsResult(assessment){
+      $.ajax({
+        type: "GET",
+        url: "proxy.php?action=results&data="+assessment,
+        data: "",
+        dataType: "json",
+        success: function(responseObject) {
+
+
+
+          alert(responseObject.scores);
+          alert(responseObject.labels);
+          plotTraits(responseObject.scores, responseObject.labels);
+        },
+        error: function(){
+          setFooter(responseObject.date+": "+responseObject.returnMessage);
+        }});
+
+        //85cb23de-dd66-4263-8cc6-e90cea35c878
+        //9e0ac3e4-6881-4c77-be56-6f3d859f5a25
+    }
+
+    function plotTraits(data, label){
+
+
+
+      var plot1 = $.jqplot('results', data, {
+          // The "seriesDefaults" option is an options object that will
+          // be applied to all series in the chart.
+          seriesDefaults:{
+              renderer:$.jqplot.BarRenderer,
+              rendererOptions: {fillToZero: true}
+          },
+          // Custom labels for the series are specified with the "label"
+          // option on the series option.  Here a series option object
+          // is specified for each series.
+          series:label,
+          // Show the legend and put it outside the grid, but inside the
+          // plot container, shrinking the grid to accomodate the legend.
+          // A value of "outside" would not shrink the grid and allow
+          // the legend to overflow the container.
+          legend: {
+              show: true,
+              placement: 'outsideGrid'
+          },
+          axes: {
+              // Use a category axis on the x axis and use our custom ticks.
+              xaxis: {
+                  renderer: $.jqplot.CategoryAxisRenderer
+              },
+              // Pad the y axis just a little so bars can get close to, but
+              // not touch, the grid boundaries.  1.2 is the default padding.
+              yaxis: {
+                  pad: 1.05,
+                  tickOptions: {formatString: '%d'}
+              }
+          }
+      });
+    }
+
+
+    function getAssessment(){
+      $.ajax({
+    		type: "GET",
+    		url: "proxy.php?action=assessment&data=null",
+    		data: "",
+    		dataType: "html",
+    		success: function(responseObject) {
+    			//alert(responseObject);
+          loadSlides(responseObject);
+    		},
+    		error: function(){
+    			setFooter(responseObject.date+": "+responseObject.returnMessage);
+    		}});
+    }
+
+    function loadSlides(assessmentId){
+
+      Traitify.setPublicKey("p6kn5l7octtnmrj9krdc8e51a5");
+      Traitify.setHost("https://api-sandbox.traitify.com");
+      Traitify.setVersion("v1");
+      //Traitify.ui.load(assessmentId, ".assessment");
+
+      traitify = Traitify.ui.load(assessmentId, ".slide-deck",{slideDeck: {showResults: false}});
+        traitify.slideDeck.onFinished(function(){
+          getTraitsResult(assessmentId);
+        });
+
+
+    }
+    </script>
+
+
+  </head>
+  <body onload="getAssessment()">
+    <div class="assessment"></div>
+    <div class="slide-deck"></div>
+    <div id="results"></div>
+    <div class="personality-types"></div>
+    <div class="personality-traits"></div>
+  </body>
+</html>

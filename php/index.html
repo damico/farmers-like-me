@@ -1,0 +1,232 @@
+<!DOCTYPE HTML>
+<!--
+	Solarize by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>SciCrop</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery.dropotron.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/skel-layers.min.js"></script>
+		<script src="js/init.js"></script>
+
+		<script language="javascript" type="text/javascript" src="js/jquery.jqplot.min.js"></script>
+
+    <script type="text/javascript" src="js/jqplot.barRenderer.min.js"></script>
+    <script type="text/javascript" src="js/jqplot.categoryAxisRenderer.min.js"></script>
+    <script type="text/javascript" src="js/jqplot.pointLabels.min.js"></script>
+		<script type="text/javascript" src="js/jqplot.canvasTextRenderer.min.js"></script>
+		<script type="text/javascript" src="js/jqplot.canvasAxisTickRenderer.min.js"></script>
+
+    <script src="https://cdn.traitify.com/js/widgets/v1.js"></script>
+
+		<noscript>
+			<link rel="stylesheet" href="csscomplete: function() { $('#wait').hide(); complete: function() { $('#wait').hide(); }skel.css" />
+			<link rel="stylesheet" href="css/style.css" />
+			<link rel="stylesheet" type="text/css" href="css/jquery.jqplot.css" />
+		</noscript>
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+		<script>
+
+		function getTraitsResult(assessment){
+
+			$("#title").empty();
+			$("#title").append("Test finished! Processing the results...");
+			$("#title").show();
+			$("#line").empty();
+
+			$.ajax({
+				type: "GET",
+				url: "proxy.php?action=results&data="+assessment,
+				data: "",
+				dataType: "json",
+				success: function(responseObject) {
+
+
+
+					plotTraits(responseObject.scores, responseObject.labels);
+
+					$("#title").empty();
+					$("#title").append("Your Results!");
+					$("#title").show();
+					$("#line").append("Based on your test, discover how Scicrop can be useful for you!");
+					$("#line").show();
+
+				},
+
+
+				error: function(){
+					setFooter(responseObject.date+": "+responseObject.returnMessage);
+				}});
+
+				//85cb23de-dd66-4263-8cc6-e90cea35c878
+				//9e0ac3e4-6881-4c77-be56-6f3d859f5a25
+		}
+
+		function plotTraits(data, label){
+
+			var plot1 = $.jqplot('results', [data], {
+					title: 'Personality Traits',
+					series:[{renderer:$.jqplot.BarRenderer}],
+					seriesDefaults: {
+				renderer: $.jqplot.BarRenderer,
+				rendererOptions:{barMargin: 25},
+				pointLabels:{show:true, stackedValue: true}
+		},
+					axesDefaults: {
+							tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+							tickOptions: {
+								angle: -30,
+								fontSize: '10pt'
+							}
+					},
+					axes: {
+						xaxis: {
+							renderer: $.jqplot.CategoryAxisRenderer
+						}
+					}
+
+			});
+		}
+
+
+		function getAssessment(){
+
+			$("#test").hide();
+			$("#title").empty();
+			$("#title").append("Loading the Test...");
+			$("#title").show();
+			$("#line").empty();
+
+			$.ajax({
+				type: "GET",
+				url: "proxy.php?action=assessment&data=null",
+				data: "",
+				dataType: "html",
+				success: function(responseObject) {
+					//alert(responseObject);
+					loadSlides(responseObject);
+					$("#title").empty();
+					$("#title").append("Test started!");
+					$("#title").show();
+					$("#line").append("Click \"Me\" or \"Not Me \", based on what the image means to you. ");
+					$("#line").show();
+				},
+				error: function(){
+					setFooter(responseObject.date+": "+responseObject.returnMessage);
+				}});
+
+
+		}
+
+		function loadSlides(assessmentId){
+
+			Traitify.setPublicKey("p6kn5l7octtnmrj9krdc8e51a5");
+			Traitify.setHost("https://api-sandbox.traitify.com");
+			Traitify.setVersion("v1");
+			//Traitify.ui.load(assessmentId, ".assessment");
+
+			traitify = Traitify.ui.load(assessmentId, ".slide-deck",{slideDeck: {showResults: false}});
+				traitify.slideDeck.onFinished(function(){
+					getTraitsResult(assessmentId);
+				});
+
+
+		}
+		</script>
+
+	</head>
+	<body>
+
+		<!-- Header Wrapper -->
+			<div class="wrapper style1">
+
+			<!-- Header -->
+				<div id="header">
+					<div class="container">
+
+						<!-- Logo -->
+							<h1><a href="#" id="logo"><img src="images/logo_nome_small.png"></a></h1>
+
+						<!-- Nav -->
+							<nav id="nav">
+								<ul>
+									<li class="active"><a href="index.html">Home</a></li>
+
+									<li><a href="left-sidebar.html">Blog</a></li>
+									<li><a href="right-sidebar.html">angel.co/scicrop</a></li>
+								</ul>
+							</nav>
+
+					</div>
+				</div>
+			</div>
+
+		<!-- Main -->
+			<div id="main" class="wrapper style4">
+
+				<!-- Content -->
+				<div id="content" class="container">
+
+
+
+					<section id="section">
+						<header class="major">
+							<h2 id="title">SciCrop is for you!</h2>
+							<span id="line" class="byline">Based on your personality, we can offer a better solution. Make a test!</span>
+						</header>
+						<a href="#" onclick="getAssessment()" id="test" class="button">Start the test!</a>
+					</section>
+					<div class="assessment"></div>
+					<div class="slide-deck"></div>
+					<div id="results"></div>
+					<div class="personality-types"></div>
+					<div class="personality-traits"></div>
+				</div>
+			</div>
+
+
+
+			<!-- Footer -->
+	<div id="footer">
+		<section class="container">
+			<header class="major">
+				<h2>Contact us</h2>
+				<span class="byline">We are straightforward and cool people. We believe in freedom of information.</span>
+					<br>
+					<h4>Sao Paulo Office</h4>
+				<p>
+					Paulista Ave., 1636 - 16º Floor, 1602 – Bela Vista<br>
+					Sao Paulo – SP, Zipcode 01311-200 - Paulista Corporate Building
+					<br>
+					+55 (11) 2776-2392$("#title").
+					<br>
+					<br>
+					<!--mapa-->
+					<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3657.201706445454!2d-46.6565241!3d-23.5611981!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59ceb68a52d1%3A0xa0c4262b9190b8ab!2sAv.+Paulista%2C+1636+-+Bela+Vista%2C+S%C3%A3o+Paulo+-+SP!5e0!3m2!1spt-BR!2sbr!4v1410206267490" width="600" height="450" frameborder="0" style="border:0"></iframe>
+				</p>
+			</header>
+			<ul class="icons">
+				<li class="active"><a href="#" class="fa fa-leaf"><a href="mailto:info@scicrop.com">&nbsp;info@scicrop.com</a></a></li>
+
+			</ul>
+			<hr />
+		</section>
+
+		<!-- Copyright
+			<div id="copyright">
+				Design: <a href="http://templated.co">TEMPLATED</a> Images: <a href="http://unsplash.com">Unsplash</a> (<a href="http://unsplash.com/cc0">CC0</a>)
+			</div>
+-->
+	</div>
+		</div>
+
+	</body>
+</html>
