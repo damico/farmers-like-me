@@ -63,7 +63,7 @@
 
 
 				error: function(){
-					alert("Error @ getResults");
+					setFooter(responseObject.date+": "+responseObject.returnMessage);
 				}});
 
 
@@ -96,11 +96,9 @@
 		}
 
 
-
-
 		function plotTypes(data){
 
-			var plot1 = $.jqplot('chart_types', [data], {
+			var plot1 = $.jqplot('chart_type', [data], {
 					title: 'Personality Types',
 					series:[{renderer:$.jqplot.BarRenderer}],
 					seriesDefaults: {
@@ -123,6 +121,7 @@
 
 			});
 		}
+
 
 
 		function getAssessment(){
@@ -148,7 +147,7 @@
 					$("#line").show();
 				},
 				error: function(){
-					alert("Error @ getAssessment!")
+					setFooter(responseObject.date+": "+responseObject.returnMessage);
 				}});
 
 
@@ -214,7 +213,7 @@
 					</section>
 					<div class="assessment"></div>
 					<div class="slide-deck"></div>
-					<div id="chart_types"></div>
+					<div id="chart_type"></div><br><br>
 					<div id="chart_traits"></div>
 					<div class="personality-types"></div>
 					<div class="personality-traits"></div>

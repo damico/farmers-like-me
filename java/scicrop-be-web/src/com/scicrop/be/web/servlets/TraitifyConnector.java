@@ -97,6 +97,11 @@ public class TraitifyConnector extends HttpServlet {
 			sb.append("[");
 			sb2.append("[");
 
+			for(int i=0; i < personality_typesLst.size(); i++){
+				sb2.append("[\""+personality_typesLst.get(i).getPersonality_type().getName()+"\","+personality_typesLst.get(i).getScore()+"],");
+
+			}
+			
 			
 			for(int i=0; i < personality_traitsLst.size(); i++){
 				
@@ -104,7 +109,7 @@ public class TraitifyConnector extends HttpServlet {
 				if(personality_traitsLst.get(i).getScore() > 0){
 					//sb.append("["+personality_traitsLst.get(i).getScore()+"],");
 					sb.append("[\""+personality_traitsLst.get(i).getPersonality_trait().getName()+"\","+personality_traitsLst.get(i).getScore()+"],");
-					sb2.append("\""+personality_traitsLst.get(i).getPersonality_trait().getName()+"\",");
+					//sb2.append("\""+personality_traitsLst.get(i).getPersonality_trait().getName()+"\",");
 				}
 			}
 			
@@ -117,9 +122,9 @@ public class TraitifyConnector extends HttpServlet {
 			result = result.replaceAll(",\\.","");
 			result2 = result2.replaceAll(",\\.","");
 			
-			//out.print("{\"scores\":"+result+",\"labels\":"+result2+"}");
+			out.print("{\"traits\":"+result+",\"types\":"+result2+"}");
 			
-			out.print("{\"scores\":"+result+"}");
+			//out.print("{\"scores\":"+result+"}");
 			
 		}
 		out.flush();
